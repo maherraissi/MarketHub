@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MarketHub Webapp</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;max-width:900px;margin:40px auto;padding:0 16px}
+    .card{border:1px solid #e5e7eb;border-radius:8px;padding:16px;margin:12px 0}
+    code{background:#f3f4f6;padding:2px 6px;border-radius:4px}
+    button{padding:8px 12px;border:1px solid #ddd;border-radius:6px;cursor:pointer}
+  </style>
+</head>
+<body>
+  <h1>MarketHub</h1>
+  <p>Frontend statique de démonstration. Testez les APIs:</p>
+
+  <div class="card">
+    <h3>Catalog health</h3>
+    <button onclick="call('/api/catalog/health', 8081)">GET /api/catalog/health</button>
+    <pre id="catalog"></pre>
+  </div>
+
+  <div class="card">
+    <h3>Catalog products</h3>
+    <button onclick="call('/api/catalog/products', 8081)">GET /api/catalog/products</button>
+    <pre id="products"></pre>
+  </div>
+
+  <div class="card">
+    <h3>AI health</h3>
+    <button onclick="call('/ai/health', 8086)">GET /ai/health</button>
+    <pre id="ai"></pre>
+  </div>
+
+  <div class="card">
+    <h3>AI search</h3>
+    <button onclick="post('/ai/search', 8086, {query:'vis inox'})">POST /ai/search</button>
+    <pre id="ais"></pre>
+  </div>
+
+  <script>
+    async function call(path, port){
+      const id = path.includes('products') ? 'products' : (path.includes('ai')?'ai':'catalog');
+      const r = await fetch(`http://localhost:${port}${path}`);
+      document.getElementById(id).textContent = JSON.stringify(await r.json(), null, 2);
+    }
+    async function post(path, port, body){
+      const r = await fetch(`http://localhost:${port}${path}`, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+      document.getElementById('ais').textContent = JSON.stringify(await r.json(), null, 2);
+    }
+  </script>
+</body>
+</html>

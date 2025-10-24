@@ -1,0 +1,13 @@
+replicaCount: 1
+image:
+  repository: markethub/catalog-service
+  tag: dev
+service:
+  port: 8081
+resources:
+  limits:
+    cpu: 250m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
